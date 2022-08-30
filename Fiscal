@@ -1,0 +1,40 @@
+USE [******]
+GO
+/****** Object:  StoredProcedure [dbo].[*******]    Script Date: 8/30/2022 8:23:38 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		Eric Tilton
+-- Create date: 08/30/2022
+-- Description:	Returns the maximum expense report ID concatenated with the fiscal year and padded with 0's up to 5 spaces 201600001.  It then increments the number by 1
+-- =============================================
+CREATE PROCEDURE [dbo].[********] 
+
+@PANumber VARCHAR OUTPUT
+
+AS
+
+DECLARE @FiscalYear VARCHAR(4)
+DECLARE @MyDate DATETIME
+
+
+SELECT @MyDate = GetDate()
+
+if(@MyDate BETWEEN CAST('07/01/' + cast(YEAR(@MyDate) as varchar) + ' 00:00:00' as datetime) AND CAST('12/31/' + cast(YEAR(@MyDate) as varchar) + ' 11:59:59' as datetime))
+	BEGIN
+	Select @FiscalYear = YEAR(@MyDate) +1
+	END
+ELSE
+	BEGIN
+	Select @FiscalYear = YEAR(@MyDate)
+	END
+
+
+
+SELECT @PANumber = @FiscalYear + RIGHT(REPLICATE('0', 5-LEN(PANumber)) + CONVERT(VARCHAR, PANumber), 11)
+FROM [dbo].[krps_PAnumber]
+
+UPDATE 	[dbo].[krps_PAnumber]
+SET	PANumber =  'PA' + PANumber + 1
