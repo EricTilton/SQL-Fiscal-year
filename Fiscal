@@ -12,14 +12,13 @@ GO
 -- =============================================
 CREATE PROCEDURE [dbo].[********] 
 
-@PANumber VARCHAR OUTPUT
+@PANumber VARCHAR(10) OUTPUT
 
 AS
 
+DECLARE @NUM  INT
 DECLARE @FiscalYear VARCHAR(4)
 DECLARE @MyDate DATETIME
-
-
 SELECT @MyDate = GetDate()
 
 if(@MyDate BETWEEN CAST('07/01/' + cast(YEAR(@MyDate) as varchar) + ' 00:00:00' as datetime) AND CAST('12/31/' + cast(YEAR(@MyDate) as varchar) + ' 11:59:59' as datetime))
@@ -31,10 +30,10 @@ ELSE
 	Select @FiscalYear = YEAR(@MyDate)
 	END
 
+SELECT @NUM = PANumber
+FROM [dbo].[krps_PAnumber]
 
-
-SELECT @PANumber = @FiscalYear + RIGHT(REPLICATE('0', 5-LEN(PANumber)) + CONVERT(VARCHAR, PANumber), 11)
+SELECT @PANumber = CONCAT( 'PA',  @FiscalYear) + RIGHT('0000'+CAST(@NUM AS VARCHAR(4)),4)
 FROM [dbo].[krps_PAnumber]
 
 UPDATE 	[dbo].[krps_PAnumber]
-SET	PANumber =  'PA' + PANumber + 1
