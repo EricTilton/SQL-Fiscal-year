@@ -31,9 +31,9 @@ ELSE
 	END
 
 SELECT @NUM = PANumber
-FROM [dbo].[krps_PAnumber]
+FROM [dbo].[*****]
 
 SELECT @PANumber = CONCAT( 'PA',  @FiscalYear) + RIGHT('0000'+CAST(@NUM AS VARCHAR(4)),4)
-FROM [dbo].[krps_PAnumber]
+FROM [dbo].[*****]
 
-UPDATE 	[dbo].[krps_PAnumber]
+UPDATE 	[dbo].[*****]
